@@ -1,0 +1,18 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: php-apache-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: php-apache-deployment # Aponta para o nosso deployment
+  minReplicas: 1 # Número mínimo de pods
+  maxReplicas: 10 # Número máximo de pods que ele pode criar
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50 # Gatilho: escalar se a média de uso de CPU passar de 50% do que foi solicitado (requests)

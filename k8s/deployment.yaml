@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-apache-deployment
+spec:
+  replicas: 1 # Começamos com 1 réplica
+  selector:
+    matchLabels:
+      app: php-apache
+  template:
+    metadata:
+      labels:
+        app: php-apache
+    spec:
+      containers:
+      - name: php-apache-container
+        image: php-apache-escalavel:v1 # Nome da imagem que criamos
+        imagePullPolicy: IfNotPresent # Garante que ele use a imagem local
+        ports:
+        - containerPort: 80
+        resources: # IMPORTANTE PARA O HPA
+          requests:
+            cpu: "200m" # Solicita 20% de uma CPU
+          limits:
+            cpu: "500m" # Limita o uso a 50% de uma CPU
